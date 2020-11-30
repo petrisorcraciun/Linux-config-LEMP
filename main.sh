@@ -62,7 +62,9 @@ line
 }
 
 messageTop
-statusServices                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if type lsb_release >/dev/null 2>&1 ; then
+statusServices       
+
+if type lsb_release >/dev/null 2>&1 ; then
    distro=$(lsb_release -i -s)
 elif [ -e /etc/os-release ] ; then
    distro=$(awk -F= '$1 == "ID" {print $2}' /etc/os-release)
