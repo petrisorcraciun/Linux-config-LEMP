@@ -19,6 +19,9 @@ echo "-----------------------------------------"
 messageTop(){
 echo -e "${Yellow}Info: ${Color_Off}"
 line
+echo -e "IP: \t\t$(ip -4 addr show eth0 | grep -oP "(?<=inet ).*(?=/)")"
+echo -e "User: \t\t$(whoami)"
+line
 echo "$(lsb_release -a)"
 line
 echo -e "Start: \t\t$(uptime -s)"
@@ -41,7 +44,7 @@ statusServices(){
 
 
 if systemctl --type=service --state=active --state=inactive --state=running | grep -Fq 'php'; then
-    echo 'PHP version $(php -v)'
+    echo -e "PHP version \t$(php -v|grep --only-matching --perl-regexp "(PHP )\d+\.\\d+\.\\d+")"
 else
     echo -e 'PHP: \t\tis not installed.'
 fi
@@ -81,7 +84,7 @@ updateDebian(){
 }
 
 installNginx(){
-        apt install nginx
+ apt-get -y install nginx
 }
 
 messageNginx(){
@@ -94,7 +97,7 @@ if [[ $EUID -ne 0 ]]; then
 else
 
 case "$distro" in
-        debian*) echo ""; updateDebian installNginx messageNginx;;
+        debian*) echo ""; installNginx messageNginx;;
         *) echo "unknown distro"; exit 1;;
 esac
 
